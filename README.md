@@ -1,5 +1,7 @@
 # Markdown 查看器
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 <p><img src="md.png" width="110" alt="Markdown Viewer icon"></p>
 
 一个轻量的 Windows 桌面 Markdown 查看器，基于 **C# WinForms + WebView2**，渲染引擎为本地内置的 markdown-it + highlight.js（GitHub 风格样式），完全离线可用。
@@ -36,3 +38,7 @@ build.bat sc     :: 自包含构建（无需安装运行时，体积较大）
 ## 第三方声明
 
 本程序内置打包了 [markdown-it](https://github.com/markdown-it/markdown-it)（MIT）与 [highlight.js](https://github.com/highlightjs/highlight.js)（BSD-3-Clause），许可证全文见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。
+
+## 许可证
+
+本项目以 [MIT](LICENSE) 许可证发布。
