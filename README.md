@@ -29,5 +29,10 @@ build.bat sc     :: 自包含构建（无需安装运行时，体积较大）
 |------|------|
 | .NET 8 WinForms | 窗口、文件对话框、注册表文件关联 |
 | WebView2 | 渲染界面（本地 wwwroot 通过虚拟主机 `https://app` 加载） |
-| markdown-it + highlight.js | Markdown 渲染与代码高亮（内置，离线） |
+| [markdown-it](https://github.com/markdown-it/markdown-it) 13.0.1 | Markdown 渲染（内置 `wwwroot/`，离线，MIT） |
+| [highlight.js](https://github.com/highlightjs/highlight.js) 11.9.0 | 代码高亮 + GitHub 亮暗主题样式（内置，离线，BSD-3-Clause） |
 | C# ↔ JS 桥接 | `WebMessageReceived` / `ExecuteScriptAsync`，负责打开、保存、窗口控制 |
+
+## 第三方声明
+
+本程序内置打包了 [markdown-it](https://github.com/markdown-it/markdown-it)（MIT）与 [highlight.js](https://github.com/highlightjs/highlight.js)（BSD-3-Clause），许可证全文见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。
