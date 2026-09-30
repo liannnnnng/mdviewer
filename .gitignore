@@ -1,0 +1,10 @@
+# Build outputs
+bin/
+obj/
+publish/
+Markdown查看器/
+
+# IDE
+.vs/
+*.user
+*.suo
