@@ -4,6 +4,13 @@ obj/
 publish/
 Markdown查看器/
 
+# Release archives
+*.zip
+
+# Local toolchain (dotnet-install) and scratch files
+.tools/
+.tmp/
+
 # IDE
 .vs/
 *.user

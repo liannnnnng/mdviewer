@@ -53,11 +53,14 @@ namespace MarkdownViewer
                 }
             }
 
-            // Normal application startup
-            try { Application.SetHighDpiMode(HighDpiMode.PerMonitorV2); } catch { }
+            // Normal application startup (DPI awareness comes from app.manifest, PerMonitorV2)
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(args));
+            Timing.Log("main");
+            var form = new MainForm(args);
+            form.Start();          // ② 预热先行：浏览器进程拉起与 WinForms 启动并行
+            Timing.Log("form-built");
+            Application.Run(form); // ① 窗口立即出现主题色占位画面，内容就绪后无缝替换，不露白板
         }
     }
 }

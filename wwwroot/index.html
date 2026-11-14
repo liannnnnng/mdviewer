@@ -104,6 +104,9 @@
 <script src="highlight.min.js"></script>
 <script>
 (function(){
+  // 启动诊断（MDV_TIMING=1 时宿主记录）：这里已等 markdown-it/highlight 执行完
+  try{ window.chrome.webview.postMessage({cmd:'js-timing', name:String(Math.round(performance.now()))}); }catch(e){}
+  window.addEventListener('load', function(){ try{ window.chrome.webview.postMessage({cmd:'js-load', name:String(Math.round(performance.now()))}); }catch(e){} });
   var md = window.markdownit({ html:true, linkify:true, typographer:true, breaks:false,
     highlight:function(str,lang){ if(lang&&hljs.getLanguage(lang)){ try{return hljs.highlight(str,{language:lang,ignoreIllegals:true}).value;}catch(e){} } return str.replace(/&/g,'&amp;').replace(/>/g,'&gt;').replace(/</g,'&lt;'); }});
   var $=function(id){return document.getElementById(id);};
@@ -122,6 +125,10 @@
   }
 
   function post(o){ try{ window.chrome.webview.postMessage(o); }catch(e){} }
+
+  // 首帧内容就绪后上报一次，宿主收到即撤掉加载占位（只发一次）
+  var readySent=false;
+  function postReady(){ if(readySent) return; readySent=true; post({cmd:'ready'}); }
 
   function slug(s){return encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w一-龥\-]/g,''));}
   function flash(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){t.classList.remove('show');},1400); }
@@ -144,6 +151,7 @@
     content.querySelectorAll('input[type=checkbox]').forEach(function(c){c.disabled=true;});
     content.querySelectorAll('a[href^="http"]').forEach(function(a){a.target='_blank';a.rel='noopener';});
     if(searchOn && lastSearchTerm){ doSearch(lastSearchTerm); }
+    postReady();
   }
   function setMode(m){
     mode=m;
@@ -259,7 +267,8 @@
   });
 
   window.MDV={ onFile:function(name,text){ loadText(text,name); if(mode!=='preview') setMode('preview'); },
-               onSaved:function(name){ if(name) $('fname').textContent=name; flash('已保存：'+name); } };
+               onSaved:function(name){ if(name) $('fname').textContent=name; flash('已保存：'+name); },
+               noFile:function(){ postReady(); } };
 })();
 </script>
 </body>

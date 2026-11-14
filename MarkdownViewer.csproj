@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <!-- .NET Framework 4.8: built into Windows 10 1903+ / Win11, zero runtime install -->
+    <TargetFramework>net48</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <AssemblyName>MarkdownViewer</AssemblyName>
@@ -12,10 +14,18 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <ApplicationIcon>md.ico</ApplicationIcon>
     <DebugType>none</DebugType>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <!-- put the correct-arch WebView2Loader.dll at the exe dir (net48 does not resolve runtimes/) -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- tests have their own Main and are compiled separately by tests\run-tests.bat -->
+    <Compile Remove="tests\**" />
+    <None Include="tests\**" Exclude="tests\out\**" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" />
+    <!-- net48 reference assemblies so any machine with a .NET SDK can build this -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,5 +39,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <!-- the RID already put the right loader at the exe dir; runtimes/ would only duplicate it -->
+  <Target Name="DropRuntimesFolder" AfterTargets="Publish">
+    <RemoveDir Directories="$(PublishDir)runtimes" />
+  </Target>
 
 </Project>
