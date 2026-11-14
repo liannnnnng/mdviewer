@@ -77,6 +77,15 @@ namespace MarkdownViewer
             BackColor = Color.White;
             Text = "Markdown 查看器";
 
+            // 任务栏 / Alt-Tab 图标：md.ico 同时也是文件关联（DefaultIcon）用的文件
+            try
+            {
+                string icoPath = Path.Combine(AppContext.BaseDirectory, "md.ico");
+                if (File.Exists(icoPath)) Icon = new Icon(icoPath);
+                else Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            }
+            catch { }
+
             web = new WebView2 { Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right };
             Controls.Add(web);
 
